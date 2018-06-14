@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ride My Way</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width = device-width, initial-scale=1">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>            
+                <h1 id="title" class="centered"><span>Ride</span>MyWay</h1>       
+            </header>
+            <section>
+                <form class="app_form" id="sign_up" method="POST" action="">
+                    <div id="passenger">
+                        <input type="text" id="name" name="name" placeholder="Enter your Name to be Displayed on the App">
+                        <input type="email" id="email" name="email" placeholder="Enter your Email Address">
+                        <input type="tel" id="telnumber" name="telNumber" placeholder="Enter your Telephone Number">
+                        <input type="password" id="password" name="password" placeholder="Enter your Desired Password">
+                    </div>
+                    <a class="open_collapsable" href="javascript:void(0)">&#43; Add a car to offer rides</a>
+                    <div id="driver" class="collapsable">
+                        <div class="upload_dl">
+                            <label for="driverLicense">Upload driver's license</label>
+                            <input type="file" id="driverlicense" name="driverLicense" accept="images/*">
+                        </div>                        
+                        <input type="text" id="regnumber" name="regNumber" placeholder="License Plate Number">
+                        <input type="number" id="carcapacity" name="carCapacity" placeholder="Car Passenger Capacity">
+                    </div>
+                    <button class="button" type="submit">Sign Up</button>
+                </form>
+            </section>
+        </div>
+    </body>
+    <script src="js/collapse.js"></script> 
+</html>

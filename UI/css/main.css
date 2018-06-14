@@ -53,10 +53,13 @@ tr:nth-child(even) {
     text-align: center;
 }
 
+<<<<<<< HEAD
 .bold{
     font-weight: bold;
 }
 
+=======
+>>>>>>> 74c398a1b6aa79581c1b9caf90ba0790912ebda3
 .left{
     float: left;
 }
@@ -111,7 +114,10 @@ header{
 a#menu_link{
     display: block;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 74c398a1b6aa79581c1b9caf90ba0790912ebda3
 /* hamburger menu */
 .menu_bar{
     width: 35px;
@@ -215,6 +221,7 @@ form.app_form .upload_dl input{
     margin-bottom: 0;
     padding: 0;
 }
+<<<<<<< HEAD
 /** Login Form **/
 #login{
     margin-bottom: 50px;
@@ -225,6 +232,8 @@ form.app_form .upload_dl input{
     border-radius: 20px;
     padding: 10px;
 }
+=======
+>>>>>>> 74c398a1b6aa79581c1b9caf90ba0790912ebda3
 
 /** rides display **/
 .rides{

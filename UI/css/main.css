@@ -53,6 +53,10 @@ tr:nth-child(even) {
     text-align: center;
 }
 
+.bold{
+    font-weight: bold;
+}
+
 .left{
     float: left;
 }
@@ -107,6 +111,7 @@ header{
 a#menu_link{
     display: block;
 }
+
 /* hamburger menu */
 .menu_bar{
     width: 35px;
@@ -209,6 +214,16 @@ form.app_form input{
 form.app_form .upload_dl input{
     margin-bottom: 0;
     padding: 0;
+}
+/** Login Form **/
+#login{
+    margin-bottom: 50px;
+}
+
+.sign_up{
+    border: 2px solid #33A1DE;
+    border-radius: 20px;
+    padding: 10px;
 }
 
 /** rides display **/

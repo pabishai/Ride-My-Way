@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ride My Way</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width = device-width, initial-scale=1">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>            
+                <h1 id="title" class="left"><span>Ride</span>MyWay</h1>
+                <div class="right">
+                    <a href="javascript:void(0)" id="menu_link">
+                        <span class="menu_bar"></span>
+                        <span class="menu_bar"></span>
+                        <span class="menu_bar"></span>
+                    </a>
+                </div>
+                <nav id="menu" class="smooth close">
+                    <ul>
+                        <li class="close"><a class="js_close" href="javascript:void(0)">&#10006;</a></li>
+                        <li class="profile special_link"><a href="profile.html">My Profile</a></li>
+                        <li><a href="rides.html">Available Rides</a></li>
+                        <li><a href="add_ride.html">Add a Ride</a></li>
+                        <li><a href="ride_requests.html">View Join Requests</a></li>
+                        <li class="special_link"><a class="logout" href="login.html">logout</a></li>
+                    </ul>
+                </nav>
+                <div class="clear"></div>           
+            </header>
+            <section>
+                <h2>Requests to Join</h2>
+                <table>
+                    <!-- table header-->
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Telephone Number</th>
+                            <th>Pickup Point</th>
+                            <th>Destination</th>
+                            <th>Accept / Reject</th>
+                        </tr>
+                    </thead><!-- end of table headers-->
+                    
+                    <!-- table data rows -->
+                    <tbody>
+                        <tr>
+                            <td>Abiria Mwema</td>
+                            <td>0711 111 111</td>
+                            <td>Kasarani Stadium</td>
+                            <td>Nairobi CBD</td>
+                            <td><button class="button accept">Accept &#10004;</button> <button class="button reject">Reject &#10006;</button></td>
+                        </tr>
+                        <tr>
+                            <td>Abiria Mtukutu</td>
+                            <td>0766 666 666</td>
+                            <td>Juja JKUAT</td>
+                            <td>Roysambu</td>
+                            <td><button class="button accept">Accept &#10004;</button> <button class="button reject">Reject &#10006;</button></td>
+                        </tr>
+                        <tr>
+                            <td>Mkubwa Sana</td>
+                            <td>0799 999 999</td>
+                            <td>Muthaiga Flyover</td>
+                            <td>Norfork Nairobi</td>
+                            <td><button class="button accept">Accept &#10004;</button> <button class="button reject">Reject &#10006;</button></td>
+                        </tr>
+                    </tbody>               
+                </table>
+            </section>
+        </div>
+    </body>
+    <script src="js/main.js"></script>
+</html>

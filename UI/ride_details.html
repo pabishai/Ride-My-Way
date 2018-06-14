@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ride My Way</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width = device-width, initial-scale=1">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>            
+                <h1 id="title" class="left"><span>Ride</span>MyWay</h1>
+                <div class="right">
+                    <a href="javascript:void(0)" id="menu_link">
+                        <span class="menu_bar"></span>
+                        <span class="menu_bar"></span>
+                        <span class="menu_bar"></span>
+                    </a>
+                </div>
+                <nav id="menu" class="smooth close">
+                    <ul>
+                        <li class="close"><a class="js_close" href="javascript:void(0)">&#10006;</a></li>
+                        <li class="profile special_link"><a href="profile.html">My Profile</a></li>
+                        <li><a href="rides.html">Available Rides</a></li>
+                        <li><a href="add_ride.html">Add a Ride</a></li>
+                        <li><a href="ride_requests.html">View Join Requests</a></li>
+                        <li class="special_link"><a class="logout" href="login.html">logout</a></li>
+                    </ul>
+                </nav>
+                <div class="clear"></div>           
+            </header>
+            <section>
+                <h2>Ride Details</h2>
+                <form class="app_form" id="ride_details" method="POST" action="">
+                    <p>Driver Name: Endesha Polepole</p>
+                    <p>Telephone Number: 0700 000 000</p>
+                    <p>Car registration: KZZ 888A</p>
+                    <p>Coming from: Thika Road</p>
+                    <p>Going to: Nairobi CBD</p>
+                    <input type="text" id="pick_up" name="pick_up" placeholder="Where to be picked up">
+                    <button class="button">Request to Join</button>
+                    <div class="response">
+                        <p class="pending">Pending............</p>
+                    </div>
+                </form>            
+            </section>
+        </div>
+    </body>
+    <script src="js/main.js"></script>
+</html>

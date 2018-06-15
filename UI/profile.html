@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <title>Ride My Way</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width = device-width, initial-scale=1">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>            
+                <h1 id="title" class="left"><span>Ride</span>MyWay</h1>
+                <div class="right">
+                    <a href="javascript:void(0)" id="menu_link">
+                        <span class="menu_bar"></span>
+                        <span class="menu_bar"></span>
+                        <span class="menu_bar"></span>
+                    </a>
+                </div>
+                <nav id="menu" class="smooth close">
+                    <ul>
+                        <li class="close"><a class="js_close" href="javascript:void(0)">&#10006;</a></li>
+                        <li class="profile special_link"><a href="profile.html">My Profile</a></li>
+                        <li><a href="index.html">Available Rides</a></li>
+                        <li><a href="add_ride.html">Add a Ride</a></li>
+                        <li><a href="ride_requests.html">View Join Requests</a></li>
+                        <li class="special_link"><a class="logout" href="login.html">logout</a></li>
+                    </ul>
+                </nav>
+                <div class="clear"></div>           
+            </header>
+            <section>
+                <h2>Mtu Watu</h2>
+                <!-- Begin Rides Taken -->
+                <div id="rides_taken" class="left">
+                    <h3>Rides Taken</h3>
+                    <span id="number_taken">3</span>
+                    <h3>List of the rides taken</h3>
+                    <table>
+                        <!-- table header-->
+                        <thead>
+                            <tr>
+                                <th>Driver Name</th>
+                                <th>Pickup Point</th>
+                                <th>Destination</th>
+                            </tr>
+                        </thead><!-- end of table headers-->
+                        
+                        <!-- table data rows -->
+                        <tbody>
+                            <tr>
+                                <td>Dereva Mwema</td>
+                                <td>Ruaka Town</td>
+                                <td>Githurai</td>
+                            </tr>
+                            <tr>
+                                <td>Dereva Mtukutu</td>
+                                <td>Juja JKUAT</td>
+                                <td>Roysambu</td>
+                            </tr>
+                            <tr>
+                                <td>Endesha Polepole</td>
+                                <td>Muthaiga Flyover</td>
+                                <td>Norfork Nairobi</td>
+                            </tr>
+                        </tbody>               
+                    </table>
+                </div><!-- End rides taken -->
+
+                <!-- Beginning rides given -->
+                <div id="rides_given" class="right">
+                        <h3>Rides Given</h3>
+                        <span id="number_given">3</span>
+                        <h3>List of the rides given</h3>
+                        <table>
+                            <!-- table header-->
+                            <thead>
+                                <tr>
+                                    <th>Passenger Name</th>
+                                    <th>Pickup Point</th>
+                                    <th>Destination</th>
+                                </tr>
+                            </thead><!-- end of table headers-->
+                            
+                            <!-- table data rows -->
+                            <tbody>
+                                <tr>
+                                    <td>Abiria Mwema</td>
+                                    <td>Ruaka Town</td>
+                                    <td>Githurai</td>
+                                </tr>
+                                <tr>
+                                    <td>Mtu Mwingine</td>
+                                    <td>Juja JKUAT</td>
+                                    <td>Roysambu</td>
+                                </tr>
+                                <tr>
+                                    <td>Abiria Polepole</td>
+                                    <td>Muthaiga Flyover</td>
+                                    <td>Norfork Nairobi</td>
+                                </tr>
+                            </tbody>               
+                        </table>
+                    </div><!-- End rides given -->
+            </section>
+        </div>
+    </body>
+    <script src="js/main.js"></script>
+</html>

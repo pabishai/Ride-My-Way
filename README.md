@@ -1,4 +1,6 @@
 # Ride-My-Way
+[![Build Status](https://travis-ci.com/PAbishai/Ride-My-Way.svg?branch=master)](https://travis-ci.com/PAbishai/Ride-My-Way)
+
 Ride My Way app App is a carpooling application that provides drivers with the ability to create ride offers and passengers to join available ride offers.
 
 The core features are:

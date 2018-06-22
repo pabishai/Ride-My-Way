@@ -34,5 +34,4 @@ def test_api_joinRequets(client,ride_id,sample_request):
     assert result["join_request"]["ride_id"] == ride_id
     assert result["join_request"]["passenger_id"] == sample_request["passenger_id"]
     assert result["join_request"]["pickup"] == sample_request["pickup"]
-    assert result["join_request"]["accepted"] == False
 

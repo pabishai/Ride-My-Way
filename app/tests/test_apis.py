@@ -52,7 +52,7 @@ def test_api_singleRides(client,sample_ride):
     #test that it only retrieves one item
     assert len(result["ride"]) ==  1
     #test that the item received matches
-    assert result["ride"][0] == sample_ride
+    assert result["ride"][0] == sample_ride[1]
 
 
 

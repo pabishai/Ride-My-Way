@@ -1,1 +1,1 @@
-web: gunicorn apis:app
+web: gunicorn app.resources.apis:app

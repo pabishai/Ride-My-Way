@@ -1,5 +1,5 @@
 # Ride-My-Way
-[![Build Status](https://travis-ci.com/PAbishai/Ride-My-Way.svg?branch=master)](https://travis-ci.com/PAbishai/Ride-My-Way) [![Coverage Status](https://coveralls.io/repos/github/PAbishai/Ride-My-Way/badge.svg?branch=master)](https://coveralls.io/github/PAbishai/Ride-My-Way?branch=master)
+[![Build Status](https://travis-ci.com/PAbishai/Ride-My-Way.svg?branch=develop)](https://travis-ci.com/PAbishai/Ride-My-Way) [![Coverage Status](https://coveralls.io/repos/github/PAbishai/Ride-My-Way/badge.svg?branch=master)](https://coveralls.io/github/PAbishai/Ride-My-Way?branch=master)
 
 Ride My Way app App is a carpooling application that provides drivers with the ability to create ride offers and passengers to join available ride offers.
 

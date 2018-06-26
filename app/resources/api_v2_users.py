@@ -53,7 +53,7 @@ def login():
     
     return make_response(jsonify({"status":"success","name":user_id[0]}),200)
 
-@app.route('api/v2/users/rides', methods=['POST'])
+@app.route('/api/v2/users/rides', methods=['POST'])
 def add_ride():
 
     if not request.is_json:

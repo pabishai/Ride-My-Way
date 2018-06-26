@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, make_response, abort
+
 
 app = Flask(__name__)
 
@@ -32,6 +33,20 @@ rides = [
 def getRides():
     # return a status message, rides list and 200 ok code
     return make_response(jsonify({"status":"ok", "rides":rides}),200)
+
+
+""" getSingleRide() returns a single ride based on the ride id
+"""
+@app.route('/api/v1/rides/<int:ride_id>', methods=['get'])
+def getSingleRide(ride_id):
+    #get ride["id"]=ride_id from the data source
+    ride = [ride for ride in rides if ride["id"]==ride_id]
+    
+    #404 not found error if no ride with id is found
+    if len(ride) == 0:
+        abort(404)
+
+    return make_response(jsonify({"status":"ok", "ride":ride}),200)
 
 
 if __name__ == '__main__':

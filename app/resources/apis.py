@@ -9,18 +9,20 @@ app = Flask(__name__)
 rides = []
 ride_requests=[]
 
-""" addRide() adds a ride to rides.
-    ride_format = {
-        "id":ride_id,
-        "driver_id":user_id,
-        "location_from":where ride starts,   
-        "destination":destination,
-        "leaving":time ride leaves,
-        "full":checkss whether ride is at capacity
-    }
-"""
+
 @app.route('/api/v1/rides', methods=['POST'])
 def addRide():
+
+    """ addRide() adds a ride to rides.
+        ride_format = {
+            "id":ride_id,
+            "driver_id":user_id,
+            "location_from":where ride starts,   
+            "destination":destination,
+            "leaving":time ride leaves,
+            "full":checks whether ride is at capacity
+        }
+    """
     if not request.is_json:
         abort(400,"request not json")
     
@@ -50,21 +52,22 @@ def addRide():
 
     return make_response(jsonify({"status":"created", "ride":ride}),201)
     
-"""
-    getrides() return a json string with a list of all rides when /api/v1/rides
-"""
 @app.route("/api/v1/rides", methods=["GET"])
 def getRides():
-    # return a status message, rides list and 200 ok code
+
+    """ getrides() return a json string with a list of all rides when /api/v1/rides
+        return a status message, rides list and 200 ok code
+    """
     return make_response(jsonify({"status":"ok", "rides":rides}),200)
     
 
-""" getSingleRide() returns a single ride based on the ride id
-"""
 @app.route('/api/v1/rides/<int:ride_id>', methods=['GET'])
-
 def getSingleRide(ride_id):
-    #get ride["id"]=ride_id from the data source
+    
+    """ getSingleRide() returns a single ride based on the ride id
+        get ride["id"]=ride_id from the data source
+    """
+    #
     ride = [ride for ride in rides if ride["id"]==ride_id]
     
     #404 not found error if no ride with id is found

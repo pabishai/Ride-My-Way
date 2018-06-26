@@ -30,9 +30,10 @@ def sample_request():
 
     return test_data
 
-"""add a test ride first to allow for the other tests
-"""
+
 def test_api_addRide(client,sample_ride):
+    """add a test ride first to allow for the other tests
+    """
     response = client.post('/api/v1/rides', data = json.dumps(sample_ride), content_type = 'application/json')
     result = json.loads(response.data)
     #test if response code is 201 CREATED

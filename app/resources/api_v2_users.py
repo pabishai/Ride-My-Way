@@ -46,15 +46,49 @@ def login():
     values = [email,password]
     db = psycopg2.connect(conn_string)
     cursor = db.cursor()
-    cursor.execute("SELECT name FROM users WHERE email = %s AND password = %s",values)
-    user_name = cursor.fetchone()
-    if user_name is None:
+    cursor.execute("SELECT id FROM users WHERE email = %s AND password = %s",values)
+    user_id = cursor.fetchone()
+    if user_id is None:
         return make_response(jsonify({"status":"username or password wrong"}),404)
     
-    return make_response(jsonify({"status":"success","name":user_name[0]}),200)
+    return make_response(jsonify({"status":"success","name":user_id[0]}),200)
 
+@app.route('api/v2/users/rides', methods=['POST'])
+def add_ride():
+
+    if not request.is_json:
+        abort(400,"request not json")
     
+    if not "location" in request.get_json(): 
+        abort(422,"enter where the ride starts")
     
+    if not "leaving" in request.get_json(): 
+        abort(422,"enter the time the ride starts")
+    
+    if not "destination" in request.get_json():
+        abort(422,"enter the destination of the ride")
+
+    data = request.get_json(force=True)
+    user_id = data['user_id']
+    location = data['location']
+    destination = data['destination']
+    leaving = data['leaving']
+    values = [user_id,location, destination, leaving]
+
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO rides (user_id, location, destination, leaving) VALUES (%s,%s,%s,%s)",values)
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return make_response(jsonify({
+        "status":"ride added",
+        "user_id":user_id,
+        "location":location,
+        'destinatoin':destination,
+        'leaving':leaving
+        }),201)    
 
     
 

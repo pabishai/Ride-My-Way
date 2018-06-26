@@ -10,6 +10,7 @@ def client():
 @pytest.fixture
 def sample_ride():
     # sample_data added to api_rides as first dictionary in the list
+
     test_rides = [
         {
             "id":1,
@@ -53,6 +54,5 @@ def test_api_singleRides(client,sample_ride):
     assert len(result["ride"]) ==  1
     #test that the item received matches
     assert result["ride"][0] == sample_ride[1]
-
 
 

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, make_response, abort
 
+
 app = Flask(__name__)
 
 # Data structure to hold rides
@@ -50,5 +51,3 @@ def getSingleRide(ride_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

@@ -1,5 +1,4 @@
 import psycopg2
-from config import config
 from flask import Flask, request, abort, make_response, jsonify
 import json
 
@@ -89,9 +88,6 @@ def add_ride():
         'destinatoin':destination,
         'leaving':leaving
         }),201)    
-
-    
-
     
 if __name__ == '__main__':
     app.run(debug=True)

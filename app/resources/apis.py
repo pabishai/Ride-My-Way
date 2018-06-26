@@ -1,10 +1,13 @@
 from flask import Flask, jsonify, make_response, abort, request
 
+
 app = Flask(__name__)
 
 # Data structure to hold rides
 #sample data
+
 rides = []
+ride_requests=[]
 
 """ addRide() adds a ride to rides.
     ride_format = {
@@ -59,6 +62,7 @@ def getRides():
 """ getSingleRide() returns a single ride based on the ride id
 """
 @app.route('/api/v1/rides/<int:ride_id>', methods=['GET'])
+
 def getSingleRide(ride_id):
     #get ride["id"]=ride_id from the data source
     ride = [ride for ride in rides if ride["id"]==ride_id]
@@ -69,7 +73,7 @@ def getSingleRide(ride_id):
 
     return make_response(jsonify({"status":"ok", "ride":ride}),200)
 
-ride_requests=[]
+
 
 @app.route('/api/v1/rides/<int:ride_id>/requests', methods=['POST'])
 def joinRequest(ride_id): 
@@ -109,5 +113,3 @@ def unprocessableEntity(error):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

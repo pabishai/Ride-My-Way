@@ -10,6 +10,7 @@ def client():
 @pytest.fixture
 def sample_ride():
     # sample_data added to api_rides as first dictionary in the list
+    
     test_rides = {
         "driver_id":1,
         "location":"Thika",   
@@ -43,6 +44,8 @@ def test_api_addRide(client,sample_ride):
     assert data["location"] == sample_ride["location"]
     assert data["destination"] == sample_ride["destination"]
     assert data["leaving"] == sample_ride["leaving"]
+
+
 
 def test_api_rides(client,sample_ride):
     response = client.get('/api/v1/rides')
@@ -84,6 +87,5 @@ def test_api_joinRequets(client,sample_request):
     assert result["join_request"]["ride_id"] == sample_request["ride_id"]
     assert result["join_request"]["passenger_id"] == sample_request["passenger_id"]
     assert result["join_request"]["pickup"] == sample_request["pickup"]
-
 
 

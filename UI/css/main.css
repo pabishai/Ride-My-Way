@@ -1,0 +1,294 @@
+
+/**
+*   General Common CSS
+*/
+
+html,body{
+    margin:0;
+    height: 100%;
+    width: 100%;
+    font-size: 100%;
+    overflow: auto;
+}
+
+/* remove link text formatting */
+a, a:link, a:visited, a:hover{
+    color: #000000;
+    text-decoration: none;
+}
+
+ul,li{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,td{
+    text-align: left;
+    padding: 10px;
+}
+
+th{
+    background: #696969;
+    color: #ffffff;
+}
+
+tr:nth-child(even) {
+    background: #c0c0c0;
+}
+
+.smooth{
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+}
+
+/* centre elements with class */
+.centered{
+    text-align: center;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.left{
+    float: left;
+}
+
+.right{
+    float: right;
+}
+
+/* clears float */
+.clear{
+    clear: both;
+}
+
+/* Ensure the width does not overflow */
+input, button{
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox */
+    box-sizing: border-box;
+}
+
+/* Add pointer mouse when hovering over buttons */
+button:hover{
+    cursor: pointer;
+}
+
+/**
+*** Width of the site is 1000px
+**/
+
+.wrapper{
+    max-width: 1000px;
+    margin: auto;
+    padding-top: 50px;
+}
+
+/* Center the title */
+#title{
+    margin-bottom: 50px;
+    margin-top: 0;
+}
+
+#title span{
+    background-color: #000000;
+    color: #ffffff;
+    padding: 10px;
+}
+
+header{
+    border-bottom: 1px solid #696969;
+}
+
+a#menu_link{
+    display: block;
+}
+
+/* hamburger menu */
+.menu_bar{
+    width: 35px;
+    height: 2px;
+    background-color: #333333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/** overlay menu **/
+#menu{
+    width: 0;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    display: block;
+    z-index: 1;
+    overflow-y: auto;
+}
+
+#menu ul{
+    position: absolute;
+    display: block;
+    height: 100%;
+    right: 0;
+    top: 0;
+    width: 40%;
+    background-color: rgba(0,0,0,1);
+    text-align: right;
+    z-index: 999;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+#menu li{
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+#menu li.close{
+    margin-bottom: 50px;
+}
+
+#menu li.profile{
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ffffff;
+    margin-bottom: 30px;
+    width: auto;
+}
+
+
+#menu a{
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+
+#menu li.special_link a{
+    font-style: italic;
+}
+
+section{
+    margin-top: 50px;
+}
+
+/* Set form width, font size and background color */
+form.app_form{
+    max-width: 300px;
+    margin: auto;
+    padding: 50px 100px;
+    border: 1px solid #c0c0c0;
+    overflow: hidden;
+    display: block;
+}
+
+form.app_form input{
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.open_collapsable{
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.collapsable{
+    display: none;
+}
+
+.upload_dl{
+    border: 1px solid #999999;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+form.app_form .upload_dl input{
+    margin-bottom: 0;
+    padding: 0;
+}
+/** Login Form **/
+#login{
+    margin-bottom: 50px;
+}
+
+.sign_up{
+    border: 2px solid #33A1DE;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+/** rides display **/
+.rides{
+    display: inline-block;
+    margin: 0 30px 20px 0;
+    padding: 10px;
+    border: 1px solid #999999;
+}
+
+.rides img{
+    display: block;
+    margin: auto;
+}
+
+.button, a.button{
+    background-color:#696969;
+    padding: 15px;
+    border: none;
+    font-weight: 900;
+    color: #ffffff;
+}
+
+#available_rides{
+    margin-top: 50px;
+}
+
+.pending{
+    color: #990000;
+}
+
+.accept{
+    background-color: #008000;
+}
+
+.reject{
+    background-color: #990000;
+}
+
+#number_taken, #number_given{
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50%;
+    color: #ffffff;
+    display: block;
+}
+
+#number_taken{
+    background: #333333;
+}
+
+#number_given{
+    background: #696969;
+}
+
+#rides_taken, #rides_given{
+    display: inline-block;
+    width: 45%;
+}
+
+#rides_taken{
+    padding-right: 5%;
+    border-right: 2px solid #333333;
+}
+
+

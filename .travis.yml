@@ -6,7 +6,8 @@ install:
   - pip install -r requirements.txt
 # command to run tests
 script:
-  - pytest
+  - pytest 
+  - coverage run --source=. app/resources/apis.py test app/tests/test_apis.py
 after_success:
   - coveralls
 

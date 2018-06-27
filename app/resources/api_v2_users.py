@@ -144,8 +144,8 @@ def get_ride(ride_id):
         "passengers":output[5]
     }
     
-    driver_id = ride["driver_id"]
-    cursor.execute("SELECT name, car_reg FROM users WHERE id = %s",str(driver_id))
+    driver_id = str(ride["driver_id"])
+    cursor.execute("SELECT name, car_reg FROM users WHERE id = " + driver_id)
     driver = []
     driver = cursor.fetchone()
     ride["driver_name"] = driver[0]
@@ -218,7 +218,7 @@ def get_requests(ride_id):
 def edit_requests(request_id, ride_id):
 
     data = request.get_json(force = True)
-    status = data['status']
+    status = data['request_status']
     
     db = psycopg2.connect(conn_string)
     cursor = db.cursor()
@@ -227,7 +227,7 @@ def edit_requests(request_id, ride_id):
     cursor.close()
     db.close()
     
-    return make_response(jsonify({"status":"success", "requests_status":status}),200)
+    return make_response(jsonify({"status":"success", "request_status":status}),200)
 
    
 if __name__ == '__main__':

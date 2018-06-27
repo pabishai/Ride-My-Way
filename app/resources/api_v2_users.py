@@ -226,7 +226,7 @@ def edit_requests(request_id, ride_id):
     db.commit()
     cursor.close()
     db.close()
-    
+   
     return make_response(jsonify({"status":"success", "request_status":status}),200)
 
    

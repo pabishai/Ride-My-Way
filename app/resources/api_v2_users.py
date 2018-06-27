@@ -123,11 +123,11 @@ def get_rides():
     
     return make_response(jsonify({"status":"success","rides":rides}),200)
 
-@app.route('/api/v2/rides/<int:ride_id>', methods=['GET'])
+@app.route('/api/v2/rides/<ride_id>', methods=['GET'])
 def get_ride(ride_id):
     db = psycopg2.connect(conn_string)
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM rides WHERE id = " + str(ride_id))
+    cursor.execute("SELECT * FROM rides WHERE id = " + ride_id)
     outputs = []
     outputs = cursor.fetchone()
     output = outputs
@@ -154,10 +154,38 @@ def get_ride(ride_id):
     return make_response(jsonify({"status":"success","ride":ride}),200)
 
 
-@app.route('/api/v2/users/rides/<int:ride_id>/requests', methods=['GET'])
+@app.route('/api/v2/rides/<ride_id>/requests', methods=['POST'])
 def post_request(ride_id):
-    pass
+    if not request.is_json:
+        abort(400,"request not json")
+    
+    if not 'passenger_id' in request.get_json(force=True):
+        abort(422,"passenger_id missing")
+    
+    data = request.get_json()
+    ride_id = ride_id
+    passenger_id = data['passenger_id']
+    pickup = data['pickup']
+    dropoff = data['dropoff']
+    status = "pending"
+    values = []
+    values = [ride_id,passenger_id,pickup,dropoff,status]
+    
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO requests (ride_id, passenger_id, pickup, dropoff, status) VALUES (%s,%s,%s,%s,%s)",values) 
+    db.commit()
+    cursor.close()
+    db.close()   
 
+    return make_response(jsonify({
+        "status":"request sent",
+        "ride_id":values[0],
+        "passenger_id":values[1],
+        "pickup":values[2],
+        "dropoff":values[3],
+        "request_status":values[4]
+        }),201)
 
     
 if __name__ == '__main__':

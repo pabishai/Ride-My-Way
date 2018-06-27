@@ -162,7 +162,7 @@ def post_request(ride_id):
     if not 'passenger_id' in request.get_json(force=True):
         abort(422,"passenger_id missing")
     
-    data = request.get_json()
+    data = request.get_json(force = True)
     ride_id = ride_id
     passenger_id = data['passenger_id']
     pickup = data['pickup']
@@ -214,9 +214,20 @@ def get_requests(ride_id):
     
     return make_response(jsonify({"status":"success","requests":requests}),200)
 
-@app.route('/api/v2//users/rides/<ride_id>/requests/<request_id>', methods=['PUT'])
-def edit_requests(ride_id,request_id):
-    pass
+@app.route('/api/v2/users/rides/<ride_id>/requests/<request_id>', methods=['PUT'])
+def edit_requests(request_id, ride_id):
+
+    data = request.get_json(force = True)
+    status = data['status']
+    
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    cursor.execute("UPDATE requests SET status = %s  WHERE id = %s AND ride_id = %s",(status,request_id,ride_id))
+    db.commit()
+    cursor.close()
+    db.close()
+    
+    return make_response(jsonify({"status":"success", "requests_status":status}),200)
 
    
 if __name__ == '__main__':

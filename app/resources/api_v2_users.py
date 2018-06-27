@@ -1,5 +1,4 @@
 import psycopg2
-from config import config
 from flask import Flask, request, abort, make_response, jsonify
 import json
 
@@ -47,11 +46,13 @@ def login():
     db = psycopg2.connect(conn_string)
     cursor = db.cursor()
     cursor.execute("SELECT id FROM users WHERE email = %s AND password = %s",values)
+    user_id=[]
     user_id = cursor.fetchone()
-    if user_id is None:
+    #respond if username or password doesnt exist
+    if user_id is None or not user_id:
         return make_response(jsonify({"status":"username or password wrong"}),404)
     
-    return make_response(jsonify({"status":"success","name":user_id[0]}),200)
+    return make_response(jsonify({"status":"success","user id":user_id[0]}),200)
 
 @app.route('/api/v2/users/rides', methods=['POST'])
 def add_ride():
@@ -73,6 +74,7 @@ def add_ride():
     location = data['location']
     destination = data['destination']
     leaving = data['leaving']
+    values = []
     values = [user_id,location, destination, leaving]
 
     db = psycopg2.connect(conn_string)
@@ -86,22 +88,37 @@ def add_ride():
         "status":"ride added",
         "user_id":user_id,
         "location":location,
-        'destinatoin':destination,
+        'destination':destination,
         'leaving':leaving
-        }),201)    
+        }),201)  
 
+@app.route('/api/v2/users/rides', methods=['GET'])
+def get_rides():
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM rides")
+    outputs = []
+    outputs = cursor.fetchall()
+
+    if not outputs or outputs is None:
+        abort(404,"No rides available at this time")
+        
+    rides = []
+    for output in outputs:
+        ride = {}
+        ride = {
+            "id":output[0],
+            "driver_id":output[1],
+            "location":output[2],
+            "destination":output[3],
+            "leaving":output[4],
+            "passengers":output[5]
+        }
+        rides.append(ride)
     
+    return make_response(jsonify({"status":"success","rides":rides}),200)
+
 
     
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-

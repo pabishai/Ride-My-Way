@@ -16,7 +16,7 @@ class AppTestCase(unittest.TestCase):
             "car_reg":"KAA 888B"
         }
 
-        self.test_login = {"email":"jaribu@test.com","password":"nywali"}
+        self.test_login = {"email":"jaribu@test.com", "password":"nywali"}
 
         self.test_add_ride = {
             "user_id" : 2,

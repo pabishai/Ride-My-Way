@@ -187,6 +187,37 @@ def post_request(ride_id):
         "request_status":values[4]
         }),201)
 
+@app.route('/api/v2/users/rides/<ride_id>/requests', methods=['GET'])
+def get_requests(ride_id):
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    cursor.execute("SELECT ride_id, passenger_id, pickup, dropoff, status FROM requests WHERE ride_id = " + ride_id)
+    outputs = []
+    outputs = cursor.fetchall()
+    cursor.close()
+    db.close()
+
+    if not outputs or outputs is None:
+        abort(404,"No requests available for this ride")
     
+    requests = []
+    for output in outputs:
+        request = {}
+        request = {
+            "ride_id":output[0],
+            "passenger_id":output[1],
+            "pickup":output[2],
+            "dropoff":output[3],
+            "status":output[4],
+        }
+        requests.append(request)
+    
+    return make_response(jsonify({"status":"success","requests":requests}),200)
+
+@app.route('/api/v2//users/rides/<ride_id>/requests/<request_id>', methods=['PUT'])
+def edit_requests(ride_id,request_id):
+    pass
+
+   
 if __name__ == '__main__':
     app.run(debug=True)

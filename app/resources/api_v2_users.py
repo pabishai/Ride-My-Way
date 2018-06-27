@@ -1,6 +1,7 @@
 import psycopg2
-from flask import Flask, request, abort, make_response, jsonify
 import json
+
+from flask import Flask, request, abort, make_response, jsonify
 
 app = Flask(__name__)
 
@@ -48,6 +49,8 @@ def login():
     cursor.execute("SELECT id FROM users WHERE email = %s AND password = %s",values)
     user_id=[]
     user_id = cursor.fetchone()
+    cursor.close()
+    db.close()
     #respond if username or password doesnt exist
     if user_id is None or not user_id:
         return make_response(jsonify({"status":"username or password wrong"}),404)
@@ -92,17 +95,19 @@ def add_ride():
         'leaving':leaving
         }),201)  
 
-@app.route('/api/v2/users/rides', methods=['GET'])
+@app.route('/api/v2/rides', methods=['GET'])
 def get_rides():
     db = psycopg2.connect(conn_string)
     cursor = db.cursor()
     cursor.execute("SELECT * FROM rides")
     outputs = []
     outputs = cursor.fetchall()
+    cursor.close()
+    db.close()
 
     if not outputs or outputs is None:
         abort(404,"No rides available at this time")
-        
+    
     rides = []
     for output in outputs:
         ride = {}
@@ -117,6 +122,41 @@ def get_rides():
         rides.append(ride)
     
     return make_response(jsonify({"status":"success","rides":rides}),200)
+
+@app.route('/api/v2/rides/<int:ride_id>', methods=['GET'])
+def get_ride(ride_id):
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM rides WHERE id = " + str(ride_id))
+    outputs = []
+    outputs = cursor.fetchone()
+    output = outputs
+
+    if not outputs or outputs is None:
+        abort(404,"Cannot find that ride")
+    
+    ride = {
+        "id":output[0],
+        "driver_id":output[1],
+        "location":output[2],
+        "destination":output[3],
+        "leaving":output[4],
+        "passengers":output[5]
+    }
+    
+    driver_id = ride["driver_id"]
+    cursor.execute("SELECT name, car_reg FROM users WHERE id = %s",str(driver_id))
+    driver = []
+    driver = cursor.fetchone()
+    ride["driver_name"] = driver[0]
+    ride["car_reg"] = driver[1]
+
+    return make_response(jsonify({"status":"success","ride":ride}),200)
+
+
+@app.route('/api/v2/users/rides/<int:ride_id>/requests', methods=['GET'])
+def post_request(ride_id):
+    pass
 
 
     

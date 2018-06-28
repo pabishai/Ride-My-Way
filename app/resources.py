@@ -63,8 +63,8 @@ class LoginUser(Resource):
                 },200
         except:
             return {'message':'OOPS!!! Something went wrong'}
-            
 
+            
 class RideResource(Resource):
     @jwt_required
     def post(self):
@@ -96,6 +96,7 @@ class RideResource(Resource):
             'leaving':leaving
             },201
 
+    @jwt_required
     def get(self):
         outputs = Ride.get_rides(self)
         rides = []
@@ -138,7 +139,8 @@ class Requests(Resource):
             requests.append(ride_request)
         
         return {"status":"success","requests":requests},200
-    
+
+    @jwt_required
     def post(self,ride_id):
         data = request.get_json(force = True)
         passenger_id = data['passenger_id']
@@ -155,6 +157,7 @@ class Requests(Resource):
             "request_status":ride_request.status
             },201
 
+    @jwt_required
     def put(self,ride_id,request_id):
         data = request.get_json(force = True)
         status = data['request_status']

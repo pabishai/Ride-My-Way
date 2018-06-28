@@ -21,7 +21,7 @@ class User(object):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
         cursor.execute(
-            "INSERT INTO users (name, email , password) VALUES (%s,%s,%s,%s, %s)",
+            "INSERT INTO users (name, email , password) VALUES (%s,%s,%s)",
             (self.name,self.email,self.password)
             )
         db.commit()
@@ -31,30 +31,35 @@ class User(object):
     def find_by_email(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT email FROM users WHERE email = '%s'}",self.email)
-        email=[]
-        email = cursor.fetchone()[0]
+        cursor.execute("SELECT name FROM users WHERE email = '%%s'", self.email)
+        password = []
+        password = cursor.fetchone()
         cursor.close()
         db.close()
-        return email
+        self.name = password
     
     def login_user(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT id FROM users WHERE email = %s AND password = %s",(self.email,self.password))
+        cursor.execute("SELECT id FROM users WHERE email = %s AND password = %s",(self.email, self.password))
         user_id=[]
-        user_id = cursor.fetchone()[0]
+        user_id = cursor.fetchall()
         self.user_id = user_id
         cursor.close()
         db.close()
+        return self.user_id
     
     def get_userName(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT name, car_reg FROM users WHERE id = ",(self.user_id))
+        cursor.execute("SELECT name FROM users WHERE id = '%%s'", self.user_id)
         driver = []
         driver = cursor.fetchone()
-        self.name = driver[0]
+        self.name = driver
+
+class Driver(User):
+    def __init__(self):
+        pass
 
 class RevokedTokens(object):
     def __init__(self,token):

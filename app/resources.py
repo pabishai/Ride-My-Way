@@ -25,10 +25,9 @@ class RegisterUser(Resource):
         
         new_user = User("",name,email,User.hash_password(password))
         existing_user = new_user.find_by_email()
-            
         try:
             if existing_user:
-                abort(409,'An account with that email already exist')
+                    abort(409,'An account with that email already exist')
 
             new_user.add_user()
             access_token = create_access_token(identity = email)
@@ -38,6 +37,7 @@ class RegisterUser(Resource):
                 'access_token':access_token, 
                 'refresh_token':refresh_token 
                 },201
+
         except:
             return {'message':'OOPS!!! Something went wrong'}
         
@@ -47,23 +47,16 @@ class LoginUser(Resource):
         data = request.get_json(force=True)
         email = data['email']
         password = data['password']
-        user = User("","",email,password)
+        user = User("","",email,password) 
         existing_user = user.find_by_email()
-
-        try:
-            if not existing_user:
-                abort(404,"user does not exist please register")
-            user.login_user()
-            access_token = create_access_token(identity = email)
-            refresh_token = create_refresh_token(identity = email)
-            return {
-                "status":"{} signed in".format(user.name),
-                "access_token":access_token,
-                "refresh_token":refresh_token
-                },200
-        except:
-            return {'message':'OOPS!!! Something went wrong'}
-
+        access_token = create_access_token(identity = email)
+        refresh_token = create_refresh_token(identity = email)
+        return {
+            "status":"{} signed in".format(user.name),
+            "check":user.name,
+            "access_token":access_token,
+            "refresh_token":refresh_token
+            },200      
             
 class RideResource(Resource):
     @jwt_required

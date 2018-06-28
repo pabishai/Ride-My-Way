@@ -1,0 +1,167 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Ride My Way
+
+Ride My Way App is a carpooling application that provides drivers with the ability to create ride offers and passengers to join available ride offers.
+
+The core features are:
+
+    Users can create an account and log in.
+    Drivers can add ride offers..
+    Passengers can view all available ride offers.
+    Passengers can see the details of a ride offer and request to join the ride. E.g What time the ride leaves, where it is headed e.t.c
+    Drivers can view the requests to the ride offer they created.
+    Drivers can either accept or reject a ride request.
+
+Optional features include:
+
+    Users can only see and respond to ride offers from their friends on the application .
+    Passengers get real time notifications when their request is accepted or rejected
+
+# APIs
+
+## User Sign Up [POST /auth/signup]
+
++ Request (application/json)
+        {
+            "name":"test user",
+            "email": "test@test.com",
+            "password":"12345"
+        }
+        
+### Get access and refresh token [GET]
+
++ Response 201 (application/json)
+            {
+                "status":"test@test.com registered", 
+                "access_token":"jwt_access_token", 
+                "refresh_token":"refresh_token" 
+            }
+
+## User Login [POST /auth/login]
+
++ Request (application/json)
+    {
+        "email": "test@test.com",
+        "password":"12345"
+    }
+        
+### Get access and refresh token [GET]
+
++ Response 200 (application/json)
+    {
+        "status":"signed in test user", 
+        "access_token":"jwt_access_token", 
+        "refresh_token":"refresh_token" 
+    }
+
+## Get All Rides [GET /api/v2/rides]
+### Get all rides [GET]
++ Response 200 (application/json)
+    {
+        "status":"success",
+        "rides":[
+            {
+                "id":1,
+                "driver_id":1,
+                "location":"Thika",
+                "destination":"Roysambu",
+                "leaving":"2:00pm",
+                "passengers":""
+            }
+        ]
+    }
+            
+## Add a new Ride [POST /api/v2/users/rides]
++ Request (application/json)
+
+    {
+        "location":"Thika",
+        "destination":"Roysambu",
+        "leaving":"2:00pm",
+    }
+
++ Response 201 (application/json)
+    {
+        "status":"ride added",
+        "user_id":1,
+        "location":"Thika",
+        "destination":"Roysambu",
+        "leaving":"2:00pm",
+    }
+
+## Get Ride Details [GET /api/v2/rides/<ride_id>]
+
++ Parameters
+    + ride_id (number) - ID of the ride
+
+### View a Ride's Details [GET]
+
++ Response 200 (application/json)
+
+        {
+           "status":"success", 
+           "ride_id":"1", 
+           "driver_id":"1"
+        }
+
+#Request to Join a Ride [POST /api/v2/users/rides/<ride_id>/requests]
++ Parameters
+    + ride_id (number) - ID of the ride
++ Request (application/json)
+
+    {
+        "passenger_id" : "2",
+        "pickup" : "Kasarani",
+        "dropoff" : "Roysambu"
+    }
+
++ Response 201 (application/json)
+    {
+        "status":"ride added",
+        "user_id":1,
+        "location":"Thika",
+        "destination":"Roysambu",
+        "leaving":"2:00pm",
+    }
+
+## Get Requests for a Ride [GET /api/v2/rides/<ride_id>/requests]
++ Parameters
+    + ride_id (number) - ID of the ride to add the requests
+
+### View Ride Request [GET]
+
++ Response 200 (application/json)
+
+       {
+            "status":"success",
+            requests:[
+                {
+                    "ride_id":"1",
+                    "passenger_id":"1"
+                    "pickup":"Roysambu",
+                    "dropoff":"Nairobi CBD"
+                    "status":"pending"
+                }
+            ]
+        }
+
+## Accept/Reject a Ride Request [PUT /api/v2/users/rides/<ride_id>/requests/<request_id>]
+
++ Parameters
+    + ride_id (number) - ID of the ride
+    + request_id (number) - ID of the request
+    
++ Request (application/json)
+        {
+            "request_status":"rejected"
+        }
+        
+### Get access and refresh token [GET]
+
++ Response 201 (application/json)
+            {
+                "status":"success", 
+                "request_status":"rejected" 
+            }

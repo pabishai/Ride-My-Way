@@ -22,25 +22,22 @@ class RegisterUser(Resource):
         name = data['name']
         email = data['email']
         password = data['password']
+        dl_path = data['dl_path'] = ""
+        car_reg = data['car_reg'] = ""
         
-        new_user = User("",name,email,User.hash_password(password))
-        existing_user = new_user.find_by_email()
-        try:
-            if existing_user:
-                    abort(409,'An account with that email already exist')
+        new_user = User("",name,email,User.hash_password(password),dl_path,car_reg)
+        existing_user = new_user.find_by_email(new_user.email)
+        if existing_user:
+            abort(409,'An account with that email already exist')
 
-            new_user.add_user()
-            access_token = create_access_token(identity = email)
-            refresh_token = create_refresh_token(identity = email) 
-            return {
-                'status':'{} registered'.format(data['email']), 
-                'access_token':access_token, 
-                'refresh_token':refresh_token 
-                },201
-
-        except:
-            return {'message':'OOPS!!! Something went wrong'}
-        
+        new_user.add_user()
+        access_token = create_access_token(identity = email)
+        refresh_token = create_refresh_token(identity = email) 
+        return {
+            'status':'{} registered'.format(data['email']), 
+            'access_token':access_token, 
+            'refresh_token':refresh_token 
+        },201
 
 class LoginUser(Resource):    
     def post(self):
@@ -48,18 +45,26 @@ class LoginUser(Resource):
         email = data['email']
         password = data['password']
         user = User("","",email,password) 
-        existing_user = user.find_by_email()
+        existing_user = user.find_by_email(user.email)
+        if not existing_user:
+            return {"message":"Your email does not exist, please login"},404
+
         access_token = create_access_token(identity = email)
-        refresh_token = create_refresh_token(identity = email)
-        return {
-            "status":"{} signed in".format(user.name),
-            "check":user.name,
-            "access_token":access_token,
-            "refresh_token":refresh_token
-            },200      
+        refresh_token = create_refresh_token(identity = email)   
+        hashed_password = existing_user[1]
+        user_name = existing_user[0]
+        if user.verify_hash(password,hashed_password):
+            return {
+                'status':'{} logged in'.format(user_name), 
+                'access_token':access_token, 
+                'refresh_token':refresh_token 
+            },201
+        
+        return {"message":"Wrong password"},400
+            
+   
             
 class RideResource(Resource):
-    @jwt_required
     def post(self):
         if not request.is_json:
             abort(400,"request not json")
@@ -79,17 +84,21 @@ class RideResource(Resource):
         destination = data['destination']
         leaving = data['leaving']
         ride = Ride("",user_id,location,destination,leaving)
-        ride.add_ride()
-        
-        return {
-            "status":"ride added",
-            "user_id":user_id,
-            "location":location,
-            'destination':destination,
-            'leaving':leaving
-            },201
+        is_driver = User.is_driver(user_id)
 
-    @jwt_required
+        if is_driver[1] and is_driver[2]:
+            ride.add_ride()        
+            return {
+                "status":"ride added",
+                "user_id":user_id,
+                "location":location,
+                'destination':destination,
+                'leaving':leaving,
+                'check':is_driver
+                },201
+
+        return {"message":"You have not added a car to the app"}
+
     def get(self):
         outputs = Ride.get_rides(self)
         rides = []

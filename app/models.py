@@ -7,14 +7,20 @@ db = psycopg2.connect(conn_string)
 cursor = db.cursor()
 
 class User(object):
-    def __init__(self, user_id, name, email, password):
+    def __init__(self, user_id, name, email, password, dl_path="", car_reg=""):
         self.name = name
         self.email = email
-        self.password = sha256.hash(password)
+        self.password = password
+        self.dl_path = dl_path
+        self.car_reg = car_reg
 
     @staticmethod
     def hash_password(password):
         return sha256.hash(password)
+    
+    @staticmethod
+    def verify_hash(password,hash):
+        return sha256.verify(password, hash)
 
 
     def add_user(self):
@@ -28,38 +34,26 @@ class User(object):
         cursor.close()
         db.close()
     
-    def find_by_email(self):
+    @classmethod
+    def find_by_email(cls,email):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT name FROM users WHERE email = '%%s'", self.email)
-        password = []
-        password = cursor.fetchone()
+        cursor.execute("SELECT name, password FROM users WHERE email = '" + email + "'")
+        result = []
+        result = cursor.fetchone()
         cursor.close()
         db.close()
-        self.name = password
+        return result
     
-    def login_user(self):
+   
+    @classmethod
+    def is_driver(cls, driver_id):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT id FROM users WHERE email = %s AND password = %s",(self.email, self.password))
-        user_id=[]
-        user_id = cursor.fetchall()
-        self.user_id = user_id
-        cursor.close()
-        db.close()
-        return self.user_id
-    
-    def get_userName(self):
-        db = psycopg2.connect(conn_string)
-        cursor = db.cursor()
-        cursor.execute("SELECT name FROM users WHERE id = '%%s'", self.user_id)
+        cursor.execute("SELECT name, dl_path, car_reg FROM users WHERE id = '"+ str(driver_id) +"'")
         driver = []
         driver = cursor.fetchone()
-        self.name = driver
-
-class Driver(User):
-    def __init__(self):
-        pass
+        return driver
 
 class RevokedTokens(object):
     def __init__(self,token):
@@ -72,12 +66,13 @@ class RevokedTokens(object):
         db.commit()
         cursor.close()
         db.close()
-    
-    def is_revoked(self):
+
+    @classmethod
+    def is_revoked(cls, token):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        query = cursor.execute("SELECT token FROM revoked_tokens tolen = ",(self.token))
-        return query
+        query = cursor.execute("SELECT tokens FROM revoked_tokens WHERE tokens = '"+ token +"'")
+        return bool(query)
 
 
 class Ride(object):

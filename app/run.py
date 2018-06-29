@@ -16,7 +16,8 @@ app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 
 
 @jwt.token_in_blacklist_loader
-def check_token(token):
+def check_token(decrypted_token):
+    token = decrypted_token['jti']
     return models.RevokedTokens.is_revoked(token)
 
 

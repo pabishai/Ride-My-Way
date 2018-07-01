@@ -7,7 +7,6 @@ install:
   - pip install python-coveralls
 
 before_script:
-  - psql -c 'ALTER USER postgres WITH PASSWORD "ar15tottle"' -U postgres
   - psql -c 'CREATE DATABASE "ride-my-way";' -U postgres
 # command to run tests
 script:

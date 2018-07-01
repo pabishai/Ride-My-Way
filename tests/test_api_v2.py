@@ -46,8 +46,8 @@ class ApiTestCase(unittest.TestCase):
                 "dropoff" : "Thika"
             },
             "accept":{
-                "request_id": "5",
-                "ride_id": "4",
+                "request_id": "1",
+                "ride_id": "1",
                 "request_status":"accept"
             }
         }

@@ -1,13 +1,10 @@
 import psycopg2
 from passlib.hash import pbkdf2_sha256 as sha256
 
-conn = None
 conn_string = "host='localhost' dbname='ride-my-way' user='postgres' password='Ar15tottle'"
-db = psycopg2.connect(conn_string)
-cursor = db.cursor()
 
 class User(object):
-    def __init__(self, user_id, name, email, password, dl_path="", car_reg=""):
+    def __init__(self, name, email, password, dl_path="", car_reg=""):
         self.name = name
         self.email = email
         self.password = password
@@ -26,10 +23,10 @@ class User(object):
     def add_user(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute(
-            "INSERT INTO users (name, email , password) VALUES (%s,%s,%s)",
-            (self.name,self.email,self.password)
-            )
+        sql = "INSERT INTO users (name, email , password, dl_path, car_reg)" \
+              " VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')"\
+              .format(self.name, self.email, self.password, self.dl_path, self.car_reg)
+        cursor.execute(sql)
         db.commit()
         cursor.close()
         db.close()
@@ -38,7 +35,8 @@ class User(object):
     def find_by_email(cls,email):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT name, password FROM users WHERE email = '" + email + "'")
+        sql = "SELECT name, password FROM users WHERE email = '{0}'".format(email)
+        cursor.execute(sql)
         result = []
         result = cursor.fetchone()
         cursor.close()
@@ -50,7 +48,8 @@ class User(object):
     def is_driver(cls, driver_id):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT name, dl_path, car_reg FROM users WHERE id = '"+ str(driver_id) +"'")
+        sql = "SELECT name, dl_path, car_reg FROM users WHERE id = '{0}'".format(driver_id)
+        cursor.execute(sql)
         driver = []
         driver = cursor.fetchone()
         return driver
@@ -62,7 +61,8 @@ class RevokedTokens(object):
     def revoke_token(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("INSERT INTO revoked_tokens (tokens) VALUES (%s)",(self.token))
+        sql = "INSERT INTO revoked_tokens (tokens) VALUES ({0})".format(self.token)
+        cursor.execute(sql)
         db.commit()
         cursor.close()
         db.close()
@@ -71,8 +71,9 @@ class RevokedTokens(object):
     def is_revoked(cls, token):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        query = cursor.execute("SELECT tokens FROM revoked_tokens WHERE tokens = '"+ token +"'")
-        return bool(query)
+        sql = "SELECT tokens FROM revoked_tokens WHERE tokens = '{0}'".format(token)
+        result = cursor.execute(sql)
+        return bool(result)
 
 
 class Ride(object):
@@ -87,10 +88,9 @@ class Ride(object):
     def add_ride(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute(
-            "INSERT INTO rides (user_id, location, destination, leaving) VALUES (%s,%s,%s,%s)",
-            (self.user_id,self.location, self.destination, self.leaving)
-            )
+        sql = "INSERT INTO rides (user_id, location, destination, leaving) VALUES ('{0}', '{1}', '{2}', '{3}')"\
+              .format(self.user_id, self.location, self.destination, self.leaving)
+        cursor.execute(sql)
         db.commit()
         cursor.close()
         db.close() 
@@ -98,7 +98,8 @@ class Ride(object):
     def get_rides(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM rides")
+        sql = "SELECT * FROM rides"
+        cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchall()
         return outputs
@@ -106,15 +107,17 @@ class Ride(object):
     def get_ride(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM rides WHERE id = " + self.ride_id)
+        sql = "SELECT * FROM rides WHERE id = '{0}'".format(self.ride_id)
+        cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchone()
-        self.ride_id = outputs[0]
-        self.user_id = outputs[1]
-        self.location = outputs[2]
-        self.destination = outputs[3]
-        self.leaving = outputs[4]
-        self.passengers = outputs[5] 
+        if outputs:
+            self.ride_id = outputs[0]
+            self.user_id = outputs[1]
+            self.location = outputs[2]
+            self.destination = outputs[3]
+            self.leaving = outputs[4]
+            self.passengers = outputs[5] 
 
 class Request(object):
     def __init__(self,request_id, ride_id, passenger_id, pickup, dropoff, status = "pending"):
@@ -128,9 +131,10 @@ class Request(object):
     def post_request(self):      
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("INSERT INTO requests (ride_id, passenger_id, pickup, dropoff, status) VALUES (%s,%s,%s,%s,%s)",
-        (self.ride_id, self.passenger_id, self.pickup, self.dropoff, self.status)
-        ) 
+        sql = "INSERT INTO requests (ride_id, passenger_id, pickup, dropoff, status)"\
+              " VALUES ('{0}','{1}','{2}','{3}','{4}')"\
+              .format(self.ride_id, self.passenger_id, self.pickup, self.dropoff, self.status)
+        cursor.execute(sql) 
         db.commit()
         cursor.close()
         db.close()
@@ -138,7 +142,10 @@ class Request(object):
     def get_requests(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("SELECT ride_id, passenger_id, pickup, dropoff, status FROM requests WHERE ride_id = " + self.ride_id)
+        sql = "SELECT ride_id, passenger_id, pickup, dropoff, status"\
+              " FROM requests WHERE ride_id = '{0}'"\
+              .format(self.ride_id)
+        cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchall()
         cursor.close()
@@ -148,7 +155,9 @@ class Request(object):
     def edit_request(self):       
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        cursor.execute("UPDATE requests SET status = %s  WHERE id = %s AND ride_id = %s",(self.status, self.request_id, self.ride_id))
+        sql = "UPDATE requests SET status = '{0}'  WHERE id = '{1}' AND ride_id = '{2}'"\
+              .format(self.status, self.request_id, self.ride_id)
+        cursor.execute(sql)
         db.commit()
         cursor.close()
         db.close()

@@ -3,8 +3,20 @@ from passlib.hash import pbkdf2_sha256 as sha256
 
 conn_string = "host='localhost' dbname='ride-my-way' user='postgres' password='Ar15tottle'"
 
+def get_id(table):
+    db = psycopg2.connect(conn_string)
+    cursor = db.cursor()
+    sql = "SELECT * FROM {0}".format(table)
+    cursor.execute(sql)
+    outputs = []
+    outputs = cursor.fetchall()
+    id = len(outputs) + 1
+    return id
+    
+
 class User(object):
     def __init__(self, name, email, password, dl_path="", car_reg=""):
+        self.id = get_id("users")
         self.name = name
         self.email = email
         self.password = password
@@ -23,9 +35,9 @@ class User(object):
     def add_user(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        sql = "INSERT INTO users (name, email , password, dl_path, car_reg)" \
-              " VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')"\
-              .format(self.name, self.email, self.password, self.dl_path, self.car_reg)
+        sql = "INSERT INTO users (id, name, email , password, dl_path, car_reg)" \
+              " VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')"\
+              .format(self.id, self.name, self.email, self.password, self.dl_path, self.car_reg)
         cursor.execute(sql)
         db.commit()
         cursor.close()

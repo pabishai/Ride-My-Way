@@ -119,7 +119,7 @@ class ApiTestCase(unittest.TestCase):
         )
         result = json.loads(response.data)
         tokens = {
-            "access_token": result["access_token"]
+            'access_token': result['access_token']
         } 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result["status"], "success")
@@ -138,7 +138,7 @@ class ApiTestCase(unittest.TestCase):
     def test_add_ride(self):
         response = self.app.post(
             '/api/v2/users/rides',
-            headers=dict(Authorization='Bearer ' + ApiTestCase.test_login(self)["access_token"]),
+            headers=dict(Authorization='Bearer ' + ApiTestCase.test_login(self)['access_token']),
             data = json.dumps(self.test_data["ride1"]) , 
             content_type = 'application/json'
             )

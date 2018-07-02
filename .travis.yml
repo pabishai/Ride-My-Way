@@ -10,7 +10,7 @@ before_script:
   - psql -c 'CREATE DATABASE "ride-my-way";' -U postgres
   - psql ride-my-way
   -\PASSWORD ar15tottle
-  - CREATE TABLE rides id SERIAL PRIMARY KEY, user_id  INT NOT NULL, location VARCHAR NOT NULL, destination VARCHAR NOT NULL, leaving VARCHAR NOT NULL, passengers VARCHAR;
+  - CREATE TABLE rides (id SERIAL PRIMARY KEY, user_id  INT NOT NULL, location VARCHAR NOT NULL, destination VARCHAR NOT NULL, leaving VARCHAR NOT NULL, passengers VARCHAR);
   - CREATE TABLE users (id SERIAL PRIMARY KEY, name varchar NOT NULL, email varchar NOT NULL, password VARCHAR NOT NULL, dl_path varchar, car_reg varchar)
   - CREATE TABLE requests (id SERIAL PRIMARY KEY, ride_id INT NOT NULL, passenger_id INT NOT NULL, pickup VARCHAR NOT NULL, dropoff varchar, status varchar); 
    - \q

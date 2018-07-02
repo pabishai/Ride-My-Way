@@ -1,11 +1,13 @@
 from app.run import app
 from app.models import conn_string
+from app.models import User
 import psycopg2
 import unittest
 import json
 
 class ApiTestCase(unittest.TestCase):
-
+    """ Setup the test defaults
+    """
     def setUp(self):
         app.testing = True
         self.app = app.test_client()
@@ -46,35 +48,67 @@ class ApiTestCase(unittest.TestCase):
                 "dropoff" : "Thika"
             },
             "accept":{
-                "request_id": "1",
-                "ride_id": "1",
+                "request_id": 1,
+                "ride_id": 1,
                 "request_status":"accept"
             }
         }
     
     
     def test_register_user(self):
-        # Test api to register user
-        response = self.app.post(
-            '/api/v2/auth/signup', 
-            data = json.dumps(self.test_data["driver"]) , 
-            content_type = 'application/json'
-            )
-        result = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(result["status"], "success") 
-        self.assertEqual(result["message"], "{} registered".format(self.test_data["driver"]["email"]))
-        self.assertTrue(result["access_token"])
-        self.assertTrue(result["refresh_token"])
-        # Test response if user already exists
-        response = self.app.post(
-            '/api/v2/auth/signup', 
-            data = json.dumps(self.test_data["driver"]) , 
-            content_type = 'application/json'
-            )
-        result = json.loads(response.data)
-        self.assertEqual(response.status_code, 409)
-        self.assertEqual(result["message"], "An account with {} already exist".format(self.test_data["driver"]["email"])) 
+        """ Find if the test driver or test user exists
+        """
+        test_driver = User.find_by_email(self.test_data["driver"]["email"])
+        test_passenger = User.find_by_email(self.test_data["passenger"]["email"])
+        if not test_driver:
+            # Test api to register new driver
+            response = self.app.post(
+                '/api/v2/auth/signup', 
+                data = json.dumps(self.test_data["driver"]) , 
+                content_type = 'application/json'
+                )
+            result = json.loads(response.data)
+            self.assertEqual(response.status_code, 201)
+            self.assertEqual(result["status"], "success") 
+            self.assertEqual(result["message"], "{} registered".format(self.test_data["driver"]["email"]))
+            self.assertTrue(result["access_token"])
+            self.assertTrue(result["refresh_token"])
+        
+        else:
+            # Test response if user already exists
+            response = self.app.post(
+                '/api/v2/auth/signup', 
+                data = json.dumps(self.test_data["driver"]) , 
+                content_type = 'application/json'
+                )
+            result = json.loads(response.data)
+            self.assertEqual(response.status_code, 409)
+            self.assertEqual(result["message"], "An account with {} already exist".format(self.test_data["driver"]["email"])) 
+    
+        if not test_passenger:
+            # Test api to register new passenger
+            response = self.app.post(
+                '/api/v2/auth/signup', 
+                data = json.dumps(self.test_data["passenger"]) , 
+                content_type = 'application/json'
+                )
+            result = json.loads(response.data)
+            self.assertEqual(response.status_code, 201)
+            self.assertEqual(result["status"], "success") 
+            self.assertEqual(result["message"], "{} registered".format(self.test_data["passenger"]["email"]))
+            self.assertTrue(result["access_token"])
+            self.assertTrue(result["refresh_token"])
+        else:
+            # Test response if user already exists
+            response = self.app.post(
+                '/api/v2/auth/signup', 
+                data = json.dumps(self.test_data["passenger"]) , 
+                content_type = 'application/json'
+                )
+            result = json.loads(response.data)
+            self.assertEqual(response.status_code, 409)
+            self.assertEqual(result["message"], "An account with {} already exist".format(self.test_data["passenger"]["email"]))
+        
         
             
     def test_login(self):
@@ -181,9 +215,11 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(result["status"], "success")
         self.assertTrue(result["requests"])
 
+    """
     def test_edit_request(self):
         response = self.app.put(
-            '/api/v2/users/rides/'+ self.test_data["accept"]["ride_id"] +'/requests/'+ self.test_data["accept"]['request_id'],
+            '/api/v2/users/rides/{0}/requests/{1}'
+            .format(self.test_data["accept"]["ride_id"],self.test_data["accept"]["request_id"]),
             headers = dict(Authorization='Bearer ' + ApiTestCase.test_login(self)["access_token"]),
             data = json.dumps(self.test_data["accept"]["request_status"]) , 
             content_type = 'application/json'
@@ -192,6 +228,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["request_status"], "accepted")
+    """
     
    
 

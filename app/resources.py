@@ -155,7 +155,8 @@ class RideDetails(Resource):
             "location":location,
             "destination":destination,
             "leaving":leaving
-        },200      
+        },200
+              
 class Requests(Resource):
     @jwt_required
     def get(self,ride_id):
@@ -192,7 +193,7 @@ class Requests(Resource):
             "request_status":ride_request.status
             },201
 
-    @jwt_required
+
     def put(self, ride_id, request_id):
         data = request.get_json(force = True)
         status = data['request_status']

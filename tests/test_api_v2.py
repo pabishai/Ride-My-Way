@@ -50,7 +50,7 @@ def get_id(table, condition, value):
     id = 0
     if outputs:
         id = outputs[0]
-    return id
+    return int(id)
 
 class ApiTestCase(unittest.TestCase):
     """ Setup the test defaults

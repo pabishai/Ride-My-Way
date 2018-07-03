@@ -91,7 +91,7 @@ class RideResource(Resource):
         location = data['location']
         destination = data['destination']
         leaving = data['leaving']
-        ride = Ride("",user_id,location,destination,leaving)
+        ride = Ride(user_id,location,destination,leaving)
 
         #check if user has added car or driver's license
         is_driver = User.is_driver(user_id)
@@ -136,15 +136,19 @@ class RideResource(Resource):
 class RideDetails(Resource): 
     @jwt_required   
     def get(self,ride_id):
-        ride = Ride(ride_id)
-        ride.get_ride()
-        user_id = ride.user_id
-        location = ride.location
-        destination = ride.destination
-        leaving = ride.leaving
+        ride = Ride()
+        ride.ride_id = ride_id
+        ride = ride.get_ride()
+        user_id = ride[1]
+        location = ride[2]
+        destination = ride[3]
+        leaving = ride[4]
+        # Assert user is driver
         driver_details = User.is_driver(user_id)
+        # Error if not driver
         if not driver_details or not driver_details[2]:
             return {"message":"couldnt find user by that id"}
+        #get driver name and car registration
         driver_name = driver_details[0]
         car_reg = driver_details[2]
         return {
@@ -182,7 +186,7 @@ class Requests(Resource):
         passenger_id = data['passenger_id']
         pickup = data['pickup']
         dropoff = data['dropoff']
-        ride_request = Request("",ride_id, passenger_id, pickup, dropoff)
+        ride_request = Request(ride_id, passenger_id, pickup, dropoff)
         ride_request.post_request()
         return {
             "status":"request sent",
@@ -197,7 +201,8 @@ class Requests(Resource):
     def put(self, ride_id, request_id):
         data = request.get_json(force = True)
         status = data['request_status']
-        ride_request = Request(request_id,ride_id,"","","",status)
+        ride_request = Request(ride_id,"","","",status)
+        ride_request.request_id = request_id
         ride_request.edit_request()
         return {"status":"success", "request_status":status},200
     

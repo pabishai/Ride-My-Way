@@ -89,13 +89,13 @@ class RevokedTokens(object):
 
 
 class Ride(object):
-    def __init__(self, ride_id=0, user_id=0, location="", destination="", leaving="", passengers=[]):
-        self.ride_id = ride_id
+    def __init__(self, user_id=0, location="", destination="", leaving=""):
+        self.ride_id = get_id("rides")
         self.user_id = user_id
         self.location = location
         self.destination = destination
         self.leaving = leaving
-        self.passengers = passengers
+        self.passengers = []
     
     def add_ride(self):
         db = psycopg2.connect(conn_string)
@@ -123,17 +123,11 @@ class Ride(object):
         cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchone()
-        if outputs:
-            self.ride_id = outputs[0]
-            self.user_id = outputs[1]
-            self.location = outputs[2]
-            self.destination = outputs[3]
-            self.leaving = outputs[4]
-            self.passengers = outputs[5] 
+        return outputs
 
 class Request(object):
-    def __init__(self,request_id, ride_id, passenger_id, pickup, dropoff, status = "pending"):
-        self.request_id = request_id
+    def __init__(self, ride_id, passenger_id, pickup, dropoff, status = "pending"):
+        self.request_id = get_id("requests")
         self.ride_id = ride_id
         self.passenger_id = passenger_id
         self.pickup = pickup
@@ -143,9 +137,9 @@ class Request(object):
     def post_request(self):      
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        sql = "INSERT INTO requests (ride_id, passenger_id, pickup, dropoff, status)"\
-              " VALUES ('{0}','{1}','{2}','{3}','{4}')"\
-              .format(self.ride_id, self.passenger_id, self.pickup, self.dropoff, self.status)
+        sql = "INSERT INTO requests (id, ride_id, passenger_id, pickup, dropoff, status)"\
+              " VALUES ('{0}','{1}','{2}','{3}','{4}', '{5}')"\
+              .format(self.request_id, self.ride_id, self.passenger_id, self.pickup, self.dropoff, self.status)
         cursor.execute(sql) 
         db.commit()
         cursor.close()

@@ -100,8 +100,8 @@ class Ride(object):
     def add_ride(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        sql = "INSERT INTO rides (user_id, location, destination, leaving) VALUES ('{0}', '{1}', '{2}', '{3}')"\
-              .format(self.user_id, self.location, self.destination, self.leaving)
+        sql = "INSERT INTO rides (id, user_id, location, destination, leaving) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')"\
+              .format(self.ride_id, self.user_id, self.location, self.destination, self.leaving)
         cursor.execute(sql)
         db.commit()
         cursor.close()

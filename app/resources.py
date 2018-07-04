@@ -1,6 +1,5 @@
-from flask_restful import Resource
-from flask import abort,json,request
-from .models import User, Ride, Request
+from flask import Flask, abort,json,request
+from flask_restplus import Resource, fields, Model, Api
 from flask_jwt_extended import (
     create_access_token, 
     create_refresh_token, 
@@ -8,9 +7,27 @@ from flask_jwt_extended import (
     jwt_refresh_token_required, 
     get_jwt_identity, 
     get_raw_jwt
-    )
+)
+
+from .models import User, Ride, Request
+
+from .doc import *
+
+app = Flask(__name__)
+api = Api(app)
 
 class RegisterUser(Resource):
+    """ POST /auth/signup
+        Adds a new user to the database and generates an access token
+    """
+    @api.doc(
+        responses={
+            201: 'Created',
+            400: 'Validation error',
+            422: 'Unprocessable entity',
+            409: 'conflict'
+        })
+    @api.expect(user_model)
     def post(self):
         # Prevent submission of non json
         if not request.is_json:
@@ -45,7 +62,16 @@ class RegisterUser(Resource):
                 'refresh_token':refresh_token 
             },201
 
-class LoginUser(Resource):    
+class LoginUser(Resource):
+    """ POST /auth/login
+        Verifies the user based on the password and generates an access token
+    """
+    @api.doc(
+        responses={
+            200: 'Success',
+            400: 'Validation error',
+        })
+    @api.expect(login_model)
     def post(self):
         data = request.get_json(force=True)
         email = data['email']
@@ -68,12 +94,23 @@ class LoginUser(Resource):
             },200
         else:
             return {"message":"Wrong password"},400
-            
-   
-            
-class RideResource(Resource):
+
+
+           
+class RidesResource(Resource): 
     @jwt_required
+    @api.doc(
+        responses={
+            201: 'Created',
+            400: 'Validation error',
+            422: 'Unprocessable entity',
+            409: 'conflict'
+        })
+    @api.expect(ride_model)
+    # The model for the POST ride API documentation
     def post(self):
+        """ Creates a ride in the database if the user has added a car and a driver's license
+        """
         if not request.is_json:
             abort(400,"request not json")
     
@@ -113,10 +150,12 @@ class RideResource(Resource):
                 "destination":destination,
                 "leaving":leaving,
                 },201
-            
 
     @jwt_required
+    @api.marshal_list_with(ride_schema_model)
     def get(self):
+        """ Fetches a list of all available rides
+        """
         outputs = Ride.get_rides(self)
         rides = []
         for output in outputs:
@@ -133,8 +172,12 @@ class RideResource(Resource):
     
         return {"status":"success","rides":rides},200
 
-class RideDetails(Resource): 
-    @jwt_required   
+class RideDetailsResource(Resource):
+    """ GET /rides/<ride_id>
+        Fetches the details of a single ride based on the ride id
+    """ 
+    @jwt_required
+    @api.marshal_with(ride_details_schema_model) 
     def get(self,ride_id):
         ride = Ride()
         ride.ride_id = ride_id
@@ -160,10 +203,14 @@ class RideDetails(Resource):
             "destination":destination,
             "leaving":leaving
         },200
-              
-class Requests(Resource):
+
+
+class RequestsResource(Resource):
     @jwt_required
+    @api.marshal_list_with(request_view_model)
     def get(self,ride_id):
+        """ Fetches all the requests of <ride_id>
+        """
         self.ride_id = ride_id
         outputs = Request.get_requests(self)
         requests = []
@@ -174,14 +221,17 @@ class Requests(Resource):
                 "passenger_id":output[1],
                 "pickup":output[2],
                 "dropoff":output[3],
-                "status":output[4],
+                "request_status":output[4],
             }
             requests.append(ride_request)
         
         return {"status":"success","requests":requests},200
 
     @jwt_required
+    @api.expect(request_model)
     def post(self,ride_id):
+        """ Adds join a request to the ride <ride_id>
+        """
         data = request.get_json(force = True)
         passenger_id = data['passenger_id']
         pickup = data['pickup']
@@ -198,18 +248,15 @@ class Requests(Resource):
             },201
 
 
+class PutRequestResource(Resource):
+    @jwt_required
+    @api.expect(request_status_model)
     def put(self, ride_id, request_id):
+        """ Changes the status of the ride <ride_id> request <request_id> to reflect "accepted" or "rejected"
+        """
         data = request.get_json(force = True)
         status = data['request_status']
         ride_request = Request(ride_id,"","","",status)
         ride_request.request_id = request_id
         ride_request.edit_request()
-        return {"status":"success", "request_status":status},200
-    
-
-
-
-
-
-
-
+        return {"status":"success", "request_status":status},200 

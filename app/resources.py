@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import abort,json,request
 from .models import User, Ride, Request
-from flasgger import APISpec, Schema, Swagger, fields
+from flasgger import Swagger
 from flask_jwt_extended import (
     create_access_token, 
     create_refresh_token, 

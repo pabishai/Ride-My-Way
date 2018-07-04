@@ -18,6 +18,7 @@ Optional features include:
 **API ENDPOINTS **
 
 **Description of tasks to be completed?**
+
 Get the below endpoints and their tests to work
 POST /api/v2/auth/signup 
 POST /api/v2/auth/login
@@ -28,6 +29,7 @@ GET /api/v2/users/rides/<ride_id>/requests
 PUT /api/v2/users/rides/<ride_id>/requests/<request_id>'
 
 **How should this be manually tested?**
+
 Install postgress
 Create a database ride-my-way
 `createdb ride-my-way`

@@ -18,7 +18,7 @@ authorizations = {
         'name': 'X-API-KEY'
     }
 }
-api = Api(app, authorizations=authorizations, security='Bearer apikey')
+api = Api(app, authorizations=authorizations, security='apikey')
 
 
 @jwt.token_in_blacklist_loader
@@ -44,8 +44,6 @@ ns_user.add_resource(resources.LoginUser, '/login')
     Add models and namespace for documentation and resource for the path for the documentation
 """
 api.models[resources.ride_model.name] = resources.ride_model
-api.models[resources.ride_schema_model.name] = resources.ride_schema_model
-api.models[resources.ride_details_schema_model.name] = resources.ride_details_schema_model
 ns_rides = api.namespace('rides apis', description='Add ride, View Rides, View Ride Details', path='/api/v2')
 ns_rides.add_resource(resources.RidesResource, '/rides', '/rides')
 ns_rides.add_resource(resources.RideDetailsResource, '/rides/<ride_id>')
@@ -55,8 +53,6 @@ ns_rides.add_resource(resources.RideDetailsResource, '/rides/<ride_id>')
     Add namespace for documentation and resource for the path for the documentation
 """
 api.models[resources.request_model.name] = resources.request_model
-api.models[resources.request_view_model.name] = resources.request_view_model
-api.models[resources.request_status_model.name] = resources.request_status_model
 ns_requests = api.namespace('request apis', description='Add Ride Request, View a Ride Request, Edit a Ride Request', path='/api/v2')
 ns_requests.add_resource(resources.RequestsResource, '/rides/<ride_id>/requests', '/rides/<ride_id>/requests') 
 ns_requests.add_resource(resources.PutRequestResource, '/rides/<ride_id>/requests/<request_id>')

@@ -108,6 +108,7 @@ class RidesResource(Resource):
             422: 'Uprocessable entity'
         })
     @api.expect(ride_model)
+    @api.doc(security='apikey')
     # The model for the POST ride API documentation
     def post(self):
         """ Creates a ride in the database if the user has added a car and a driver's license

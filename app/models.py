@@ -1,7 +1,12 @@
 import psycopg2
 from passlib.hash import pbkdf2_sha256 as sha256
 
-conn_string = "host='localhost' dbname='ride-my-way' user='postgres' password='Ar15tottle'"
+conn = None
+host='ec2-54-235-196-250.compute-1.amazonaws.com'
+database = 'd5ao3igd3nvgtd'
+user = 'mptyynodtzhghh'
+password = '637ed4098047cdb51b1e03686350c39781e550f269ae4ed5c2a10754b0d0a9e7'
+conn_string = " host = {0} dbname={1} user={2} password={3}".format(host,database,user,password)
 
 def get_id(table):
     db = psycopg2.connect(conn_string)

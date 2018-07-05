@@ -69,7 +69,8 @@ class LoginUser(Resource):
     @api.doc(
         responses={
             200: 'Success',
-            400: 'Validation error',
+            400: 'Wrong password',
+            404: 'Your email does not exist, please register'
         })
     @api.expect(login_model)
     def post(self):
@@ -102,9 +103,12 @@ class RidesResource(Resource):
     @api.doc(
         responses={
             201: 'Created',
-            400: 'Validation error',
-            422: 'Unprocessable entity',
-            409: 'conflict'
+            400: 'request not json',
+            401: 'You have not added a car or drivers license',
+            422: { 
+                'location':'enter where the ride starts',
+                'leaving':'enter the destination of the ride'
+            }
         })
     @api.expect(ride_model)
     # The model for the POST ride API documentation
@@ -151,8 +155,14 @@ class RidesResource(Resource):
                 "leaving":leaving,
                 },201
 
+
     @jwt_required
-    @api.marshal_list_with(ride_schema_model)
+    @api.doc(
+        responses={
+            200: 'Success',
+            401: 'Invalid token'
+        }
+    )
     def get(self):
         """ Fetches a list of all available rides
         """
@@ -177,7 +187,12 @@ class RideDetailsResource(Resource):
         Fetches the details of a single ride based on the ride id
     """ 
     @jwt_required
-    @api.marshal_with(ride_details_schema_model) 
+    @api.doc(
+        responses={
+            200: 'Success',
+            401: 'Invalid token'
+        }
+    )
     def get(self,ride_id):
         ride = Ride()
         ride.ride_id = ride_id
@@ -207,7 +222,12 @@ class RideDetailsResource(Resource):
 
 class RequestsResource(Resource):
     @jwt_required
-    @api.marshal_list_with(request_view_model)
+    @api.doc(
+        responses={
+            200: 'Success',
+            401: 'Invalid token'
+        }
+    )
     def get(self,ride_id):
         """ Fetches all the requests of <ride_id>
         """
@@ -228,6 +248,12 @@ class RequestsResource(Resource):
         return {"status":"success","requests":requests},200
 
     @jwt_required
+    @api.doc(
+        responses={
+            200: 'Success',
+            401: 'Invalid token'
+        }
+    )
     @api.expect(request_model)
     def post(self,ride_id):
         """ Adds join a request to the ride <ride_id>
@@ -250,7 +276,12 @@ class RequestsResource(Resource):
 
 class PutRequestResource(Resource):
     @jwt_required
-    @api.expect(request_status_model)
+    @api.doc(
+        responses={
+            200: 'Success',
+            401: 'Invalid token'
+        }
+    )
     def put(self, ride_id, request_id):
         """ Changes the status of the ride <ride_id> request <request_id> to reflect "accepted" or "rejected"
         """

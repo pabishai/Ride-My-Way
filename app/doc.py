@@ -83,38 +83,6 @@ ride_model = Model('Test Ride',{
 """ End of rides_model definition
 """
 
-""" Show Rides
-    ---
-    Automatically documented model for showing all Rides
-"""
-ride_schema_model = Model.inherit('Test Ride Schema', ride_model,{
-    'ride_id':fields.Integer(
-        required=True, 
-        description='ID of ride',
-        example=1)
-})
-""" End of ride_schema_model definition
-"""
-
-""" Ride Details
-    ---
-    Automatically documented model for showing the ride details
-"""
-ride_details_schema_model = Model.inherit('Test Ride Schema', ride_model,{
-    'driver_name':fields.String(
-        required=True, 
-        description='The name of the driver',
-        example='Test User'
-    ),
-    'car_reg': fields.String(
-        required=True,
-        description='The number plate value of the car',
-        example='KAA 111A'
-    )
-
-})
-""" End of model definition
-"""
 
 """ Add Request
     ---
@@ -141,32 +109,4 @@ request_model = Model('Test Request',{
     )
 })
 """ End of request_model definition
-"""  
-
-""" View Request
-    ------------
-    Automatically documented model for adding a Request
-"""
-request_view_model = Model.inherit('View Requests Model', request_model,{
-    'ride_id':fields.Integer(
-        required=True, 
-        description='ID of driver creating ride',
-        example=1
-    )
-})  
-""" End of request_view_model
-"""  
-
-""" View Request
-    ------------
-    Automatically documented model for adding a Request
-"""
-request_status_model = Model('View Requests Model',{
-    'status':fields.String(
-        required=True, 
-        description='Accept or Reject a ride join request',
-        example='Accepted'
-    )
-})  
-""" End of request_view_model
-"""
+"""   

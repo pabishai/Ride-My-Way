@@ -105,10 +105,7 @@ class RidesResource(Resource):
             201: 'Created',
             400: 'request not json',
             401: 'You have not added a car or drivers license',
-            422: { 
-                'location':'enter where the ride starts',
-                'leaving':'enter the destination of the ride'
-            }
+            422: 'Uprocessable entity'
         })
     @api.expect(ride_model)
     # The model for the POST ride API documentation

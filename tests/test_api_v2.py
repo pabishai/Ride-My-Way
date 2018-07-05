@@ -182,7 +182,7 @@ class ApiTestCase(unittest.TestCase):
         """
         # Test driver add ride
         response = self.app.post(
-            '/api/v2/users/rides',
+            '/api/v2/rides',
             headers = dict(Authorization='Bearer ' + get_access_token()['access_token']),
             data = json.dumps(self.test_data["ride1"]) , 
             content_type = 'application/json'
@@ -199,7 +199,7 @@ class ApiTestCase(unittest.TestCase):
 
         # Test passenger add ride
         response = self.app.post(
-            '/api/v2/users/rides', 
+            '/api/v2/rides', 
             headers = dict(Authorization='Bearer ' + get_access_token()['access_token']),
             data = json.dumps(self.test_data["ride2"]), 
             content_type = 'application/json'
@@ -255,7 +255,7 @@ class ApiTestCase(unittest.TestCase):
         #Test driver view requests
         ride_id = "1"
         response = self.app.get(
-            '/api/v2/users/rides/' + ride_id + '/requests',
+            '/api/v2/rides/' + ride_id + '/requests',
             headers = dict(Authorization='Bearer ' + get_access_token()['access_token'])
             )
         result = json.loads(response.data)

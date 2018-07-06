@@ -83,17 +83,26 @@ ride_model = Model('Test Ride',{
 """ End of rides_model definition
 """
 
-
-""" Add Request
+""" Add Ride
     ---
     Automatically documented model for adding a Ride
 """
+complete_ride_model = Model('Complete Ride',{
+    'complete':fields.String(
+        required=True, 
+        description='mark ride as finished',
+        example='t'
+    )
+})
+""" End of rides_model definition
+"""
+
+
+""" Add Request
+    ---
+    Automatically documented model for adding a Request
+"""
 request_model = Model('Test Request',{
-    'passender_id': fields.Integer(
-        required=True,
-        description='id of passenger',
-        example=2
-    ),
     'pickup': fields.String(
         required=True,
         description='where passenger will be picked up',
@@ -102,11 +111,21 @@ request_model = Model('Test Request',{
     'dropoff':fields.String(
         description='where passenger will be allighting',
         example='Kasarani'
-    ),
-    'request_status':fields.String(
-        description='status of join request',
-        example='pending'
     )
 })
 """ End of request_model definition
-"""   
+"""  
+
+""" Edit Request
+    ---
+    Automatically documented model for adding a Request
+"""
+edit_request_model = Model('Test Edit Request',{
+    'status': fields.String(
+        required=True,
+        description='accept or reject ride offer',
+        example='accepted'
+    )
+})
+""" End of status_request_model definition
+""" 

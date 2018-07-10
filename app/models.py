@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2, psycopg2.extras
 from passlib.hash import pbkdf2_sha256 as sha256
 
 conn_string = "host='localhost' dbname='ride-my-way' user='postgres' password='Ar15tottle'"
@@ -14,7 +14,7 @@ def get_id(table):
     return id
     
 
-class User(object):
+class User():
     def __init__(self, name, email, password, dl_path="", car_reg=""):
         self.id = get_id("users")
         self.name = name
@@ -46,14 +46,15 @@ class User(object):
     @classmethod
     def find_by_email(cls,email):
         db = psycopg2.connect(conn_string)
-        cursor = db.cursor()
-        sql = "SELECT name, password FROM users WHERE email = '{0}'".format(email)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        sql = "SELECT id, email, name, password FROM users WHERE email = '{0}'".format(email)
         cursor.execute(sql)
         result = []
         result = cursor.fetchone()
         cursor.close()
         db.close()
-        return result
+        if result:
+            return result
     
    
     @classmethod
@@ -66,29 +67,30 @@ class User(object):
         driver = cursor.fetchone()
         return driver
 
-class RevokedTokens(object):
+class RevokedTokens():
     def __init__(self,token):
         self.token = token
 
     def revoke_token(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        sql = "INSERT INTO revoked_tokens (tokens) VALUES ({0})".format(self.token)
+        sql = "INSERT INTO revoked_tokens (tokens) VALUES ('{0}')".format(self.token)
         cursor.execute(sql)
         db.commit()
         cursor.close()
         db.close()
 
-    @classmethod
-    def is_revoked(cls, token):
+    @staticmethod
+    def is_revoked(jti):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
-        sql = "SELECT tokens FROM revoked_tokens WHERE tokens = '{0}'".format(token)
-        result = cursor.execute(sql)
-        return bool(result)
+        sql = "SELECT tokens FROM revoked_tokens WHERE tokens = '{0}'".format(jti)
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
 
 
-class Ride(object):
+class Ride():
     def __init__(self, user_id=0, location="", destination="", leaving=""):
         self.ride_id = get_id("rides")
         self.user_id = user_id
@@ -96,7 +98,7 @@ class Ride(object):
         self.destination = destination
         self.leaving = leaving
         self.passengers = []
-    
+
     def add_ride(self):
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()
@@ -105,27 +107,52 @@ class Ride(object):
         cursor.execute(sql)
         db.commit()
         cursor.close()
-        db.close() 
-    
-    def get_rides(self):
+        db.close()
+
+    @staticmethod 
+    def get_driver_ride(driver_id):
         db = psycopg2.connect(conn_string)
-        cursor = db.cursor()
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        sql = "SELECT * FROM rides WHERE  user_id = '{0}' AND complete = 'f'".format(driver_id)
+        cursor.execute(sql)
+        outputs = []
+        outputs = cursor.fetchone()
+        if outputs:
+            return outputs
+
+    @staticmethod
+    def get_rides():
+        db = psycopg2.connect(conn_string)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         sql = "SELECT * FROM rides"
         cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchall()
-        return outputs
+        if outputs:
+            return outputs
     
     def get_ride(self):
         db = psycopg2.connect(conn_string)
-        cursor = db.cursor()
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         sql = "SELECT * FROM rides WHERE id = '{0}'".format(self.ride_id)
         cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchone()
-        return outputs
+        if outputs:
+            return outputs
 
-class Request(object):
+    @staticmethod
+    def complete_ride(ride_id, complete):
+        db = psycopg2.connect(conn_string)
+        cursor = db.cursor()
+        sql = "UPDATE rides SET complete = '{0}' WHERE id = '{1}'"\
+              .format(complete, ride_id)
+        cursor.execute(sql)
+        db.commit()
+        cursor.close()
+        db.close()
+
+class Request():
     def __init__(self, ride_id, passenger_id, pickup, dropoff, status = "pending"):
         self.request_id = get_id("requests")
         self.ride_id = ride_id
@@ -147,17 +174,17 @@ class Request(object):
 
     def get_requests(self):
         db = psycopg2.connect(conn_string)
-        cursor = db.cursor()
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         sql = "SELECT ride_id, passenger_id, pickup, dropoff, status"\
               " FROM requests WHERE ride_id = '{0}'"\
               .format(self.ride_id)
         cursor.execute(sql)
         outputs = []
         outputs = cursor.fetchall()
+        if outputs:
+            return outputs
         cursor.close()
         db.close()
-        return outputs
-
     def edit_request(self):       
         db = psycopg2.connect(conn_string)
         cursor = db.cursor()

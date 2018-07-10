@@ -18,7 +18,12 @@ authorizations = {
         'name': 'X-API-KEY'
     }
 }
-api = Api(app, authorizations=authorizations, security='apikey')
+api = Api(
+    app, 
+    authorizations=authorizations, 
+    security='apikey',
+    description='API endpoints for Ride My Way'
+)
 
 
 @jwt.token_in_blacklist_loader

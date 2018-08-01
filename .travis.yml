@@ -8,7 +8,6 @@ install:
 
 before_script:
   - psql -c 'CREATE DATABASE "ride-my-way";' -U postgres
-  - psql -U postgres ride-my-way < scripts/ride-my-way.sql
 # command to run tests
 script:
   - coverage run -m pytest 

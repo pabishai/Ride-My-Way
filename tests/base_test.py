@@ -1,5 +1,5 @@
-from run import app
-from create_schema import parameters
+from api.run import app
+from api.create_schema import parameters
 import psycopg2
 import unittest
 import json

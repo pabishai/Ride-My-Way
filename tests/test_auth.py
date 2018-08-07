@@ -12,6 +12,7 @@ class AuthTestCase(BaseTestCase):
             "signup invalid email":{
                 "name":"Jaribu Abiria",
                 "email" : "abiria@test",
+                "tel_number": "0722 222 222",
                 "password" : "nywali",
                 "dl_path" : "",
                 "car_reg":""

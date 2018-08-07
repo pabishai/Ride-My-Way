@@ -52,6 +52,7 @@ class BaseTestCase(unittest.TestCase):
             "driver":{
                 "name":"Jaribu Dereva",
                 "email" : "dereva@test.com",
+                "tel":"0722 222 222",
                 "password" : "nywali",
                 "dl_path" : "dl/jaribu.pdf",
                 "car_reg":"KAA 888B"
@@ -59,9 +60,8 @@ class BaseTestCase(unittest.TestCase):
             "passenger":{
                 "name":"Jaribu Abiria",
                 "email" : "abiria@test.com",
-                "password" : "nywali",
-                "dl_path" : "",
-                "car_reg":""
+                "tel": "0722 222 222",
+                "password" : "nywali"
             },
             "ride":{
                 "location" : "Ruiru",

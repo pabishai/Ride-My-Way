@@ -2,7 +2,7 @@ import os
 from flask import Flask, Blueprint
 from flask_restplus import Api, fields
 from flask_jwt_extended import JWTManager
-# from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 
 from .create_schema import create_tables
 
@@ -33,7 +33,7 @@ api = Api(
     description='API endpoints for Ride My Way'
 )
 
-# CORS(app)
+CORS(app)
 
 # show jwt authorization errors on resources
 jwt._set_error_handler_callbacks(api)

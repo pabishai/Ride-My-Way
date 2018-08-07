@@ -18,3 +18,10 @@ def required_input(input,status_code):
     """
     if not input in request.get_json():
         abort(status_code,"field {0} is required".format(input))
+
+def optional_input(input):
+    """ Puts empty field in optional inputs
+    """
+    if not input in request.get_json():
+        data = request.get_json()
+        data[input] = ""

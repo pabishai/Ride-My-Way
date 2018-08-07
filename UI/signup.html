@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ride My Way</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width = device-width, initial-scale=1">
+        <link href="static/css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>            
+                <h1 id="title" class="centered"><span>Ride</span>MyWay</h1>       
+            </header>
+            <section>
+                <form enctype="application/json" class="app_form" id="sign_up" method="POST">
+                    <div id="passenger">
+                        <input type="text" id="name" name="name" placeholder="* Enter Name to be Displayed" required pattern=".{3,}" >
+                        <input type="email" id="email" name="email" placeholder="* Enter Email Address" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                        <input type="tel" id="tel" name="tel" placeholder="Enter Telephone Number" pattern="[0]{1}[7]{1}[0-9]{8}">
+                        <input type="password" id="password" name="password" placeholder="Enter Password" required pattern=".{6,}">
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                    </div>
+                    <a class="open_collapsable" href="javascript:void(0)">&#43; Add a car to offer rides</a>
+                    <div id="driver" class="collapsable">
+                        <div class="upload_dl">
+                            <label for="driverLicense">Upload driver's license</label>
+                            <input type="file" id="dl_path" name="dl_path" accept="images/*">
+                        </div>                        
+                        <input type="text" id="car_reg" name="car_reg" placeholder="License Plate Number">
+                        <input type="number" id="carcapacity" name="carCapacity" placeholder="Car Passenger Capacity">
+                    </div>
+                    <button class="button" type="submit">Sign Up</button>
+                </form>
+            </section>
+        </div>
+    </body>
+    <script src="static/js/main.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/validate.js"></script>  
+</html>

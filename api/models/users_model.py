@@ -4,9 +4,10 @@ from . import CRUD
 class User():
     """ constructor class for users
     """
-    def __init__(self, name, email, password, dl_path="", car_reg=""):
+    def __init__(self, name, email, tel, password, dl_path="", car_reg=""):
         self.name = name
         self.email = email
+        self.tel = tel
         self.password = password
         self.dl_path = dl_path
         self.car_reg = car_reg
@@ -24,13 +25,14 @@ class User():
 
     def add_user(self):
         sql = """
-              INSERT INTO users (name, email , password, dl_path, car_reg)
-              VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')
-              """.format(self.name, self.email, self.password, self.dl_path, self.car_reg)
+              INSERT INTO users (name, email , tel, password, dl_path, car_reg)
+              VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
+              """.format(self.name, self.email, self.tel, self.password, self.dl_path, self.car_reg)
         CRUD.commit(sql)
     
-    def find_by_email(self):
-        sql = "SELECT id, email, name, password FROM users WHERE email = '{0}'".format(self.email)
+    @staticmethod
+    def find_by_email(email):
+        sql = "SELECT id, email, tel, name, password FROM users WHERE email = '{0}'".format(email)
         user = CRUD.readOne(sql)
         return user
     

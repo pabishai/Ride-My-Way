@@ -11,6 +11,7 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
+            tel VARCHAR(255),
             email VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
             dl_path VARCHAR(255),

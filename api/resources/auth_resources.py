@@ -7,7 +7,7 @@ from flask_jwt_extended import (
     get_raw_jwt
 )
 
-from .shared_resources import required_input, validate_email, validate_json
+from .shared_resources import optional_input, required_input, validate_email, validate_json
 
 from ..models import users_model, tokens_model
 from docs import apiDoc_models
@@ -30,24 +30,28 @@ class RegisterUser(Resource):
         """
         validate_json()
         required_input("name",400)
+        required_input("email",400)
+        required_input("tel",400)
         required_input("password",400)
-        required_input("dl_path",400)
-        required_input("car_reg",400)
-    
+        optional_input("car_reg")
+        optional_input("dl_path")
+        
         data = request.get_json()
         name = data['name']
         email = data['email']
+        tel = data['tel']
         password = data['password']
         dl_path = data['dl_path']
         car_reg = data['car_reg']
 
+
         #validate the email
         validate_email(email)
 
-        new_user = users_model.User(name,email, users_model.User.hash_password(password), dl_path, car_reg)        
+        new_user = users_model.User(name,email, tel, users_model.User.hash_password(password), dl_path, car_reg)        
       
         # Find user by email address
-        existing_user = new_user.find_by_email()
+        existing_user = users_model.User.find_by_email(email)
 
         if existing_user:
             # Prevent user from registering twice
@@ -55,11 +59,12 @@ class RegisterUser(Resource):
         else:
             new_user.add_user()
             # Retrieve user id to be used during the session
-            user = new_user.find_by_email()
+            user = users_model.User.find_by_email(email)
             # Create payload for token generation
             payload = {
                 "id":user['id'],
                 "email":user['email'],
+                "tel":user['tel'],
                 "name":user['name']
             }
             access_token = create_access_token(identity = payload)
@@ -91,18 +96,18 @@ class LoginUser(Resource):
         password = data['password']
         # Validate email format
         validate_email(email)
-        user = users_model.User("", email, password)
         # Find if user exists
-        existing_user = user.find_by_email()
+        existing_user = users_model.User.find_by_email(email)
         if not existing_user:
             abort(404,"User {0} does not exist, please register".format(email))
         #create payload for token generation based on the existing user
         hashed_password = existing_user["password"]
         user_name = existing_user["name"]
-        if user.verify_hash(password,hashed_password):
+        if users_model.User.verify_hash(password,hashed_password):
             payload = {
             "id":existing_user["id"],
             "email":existing_user["email"],
+            "tel":existing_user['tel'],
             "name":existing_user["name"]
             }
             access_token = create_access_token(identity = payload)
